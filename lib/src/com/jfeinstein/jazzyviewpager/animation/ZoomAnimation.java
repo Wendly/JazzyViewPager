@@ -6,10 +6,31 @@ import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
 import com.nineoldandroids.view.ViewHelper;
 
 abstract public class ZoomAnimation extends BaseDynamicAnimation {
-	protected static final float ZOOM_MAX = 0.5f;
+	protected float mZoomMax;
+	protected float mPivotX;
+	protected float mPivotY;
 
 	public ZoomAnimation() {
+		this(0.5f);
+	}
+
+	public ZoomAnimation(float zoomMax) {
+		this(zoomMax, -1, -1);
+	}
+
+	public ZoomAnimation(float zoomMax, float pivotX, float pivotY) {
 		super();
+		mZoomMax = zoomMax;
+
+		mPivotX = 0.5f;
+		if ((pivotX >= 0.0f) && (pivotX <= 1.0f)) {
+			mPivotX = pivotX;
+		}
+
+		mPivotY = 0.5f;
+		if ((pivotY >= 0.0f) && (pivotY <= 1.0f)) {
+			mPivotY = pivotY;
+		}
 	}
 
 	public void animate(View left, View right, float positionOffset, int positionOffsetPixels,
@@ -18,16 +39,16 @@ abstract public class ZoomAnimation extends BaseDynamicAnimation {
 			if (left != null) {
 				manageLayer(left, true);
 				float scale = getLeftScale(positionOffset);
-				ViewHelper.setPivotX(left, left.getMeasuredWidth() * 0.5f);
-				ViewHelper.setPivotY(left, left.getMeasuredHeight() * 0.5f);
+				ViewHelper.setPivotX(left, left.getMeasuredWidth() * mPivotX);
+				ViewHelper.setPivotY(left, left.getMeasuredHeight() * mPivotY);
 				ViewHelper.setScaleX(left, scale);
 				ViewHelper.setScaleY(left, scale);
 			}
 			if (right != null) {
 				manageLayer(right, true);
 				float scale = getRightScale(positionOffset);
-				ViewHelper.setPivotX(right, right.getMeasuredWidth() * 0.5f);
-				ViewHelper.setPivotY(right, right.getMeasuredHeight() * 0.5f);
+				ViewHelper.setPivotX(right, right.getMeasuredWidth() * mPivotX);
+				ViewHelper.setPivotY(right, right.getMeasuredHeight() * mPivotY);
 				ViewHelper.setScaleX(right, scale);
 				ViewHelper.setScaleY(right, scale);
 			}
