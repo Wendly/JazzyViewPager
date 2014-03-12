@@ -165,7 +165,8 @@ public class JazzyViewPager extends ViewPager {
 	}
 
 	private State mState;
-	private int oldPage;
+	private int mCurrentPage;
+	private int mNextPage;
 
 	private View mLeft;
 	private View mRight;
@@ -189,15 +190,23 @@ public class JazzyViewPager extends ViewPager {
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		if (mState == State.IDLE && positionOffset > 0) {
-			oldPage = getCurrentItem();
-			mState = position == oldPage ? State.GOING_RIGHT : State.GOING_LEFT;
+		if (positionOffset < 0.3) {
+			mNextPage = position;
+		} else if (positionOffset > 0.7) {
+			mNextPage = position + 1;
 		}
-		boolean goingRight = position == oldPage;				
-		if (mState == State.GOING_RIGHT && !goingRight)
-			mState = State.GOING_LEFT;
-		else if (mState == State.GOING_LEFT && goingRight)
+
+		if (position > mCurrentPage) {
+			mCurrentPage = mNextPage;
+		} else if ((mCurrentPage - position) > 1) {
+			mCurrentPage = mNextPage;
+		}
+
+		if (mCurrentPage == position) {
 			mState = State.GOING_RIGHT;
+		} else {
+			mState = State.GOING_LEFT;
+		}
 
 		float effectOffset = isSmall(positionOffset) ? 0 : positionOffset;
 
@@ -217,6 +226,7 @@ public class JazzyViewPager extends ViewPager {
 		if (effectOffset == 0) {
 			disableHardwareLayer();
 			mState = State.IDLE;
+			mCurrentPage = mNextPage;
 		}
 	}
 
