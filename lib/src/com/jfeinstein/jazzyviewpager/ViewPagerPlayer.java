@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -64,6 +65,7 @@ public class ViewPagerPlayer {
 	private ViewPager mPager;
 	private ContainerPagerAdapter mAdapter;
 	private OnTouchListener mOuterOnTouchListener;
+	private OnPageChangeListener mOuterOnPageChangeListener;
 
 	private State mState;
 	private int mCurrentPage;
@@ -246,10 +248,17 @@ public class ViewPagerPlayer {
 		}
 	};
 
-	private ViewPager.OnPageChangeListener mOnPageChangeListener =
-			new ViewPager.OnPageChangeListener() {
+	public void setOnPageChangeListener(OnPageChangeListener listener) {
+		mOuterOnPageChangeListener = listener;
+	}
+
+	private OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener() {
 		@Override
 		public void onPageSelected(int position) {
+			if (mOuterOnPageChangeListener != null) {
+				mOuterOnPageChangeListener.onPageSelected(position);
+			}
+
 			if (mStarted) {
 				play();
 			}
@@ -258,6 +267,11 @@ public class ViewPagerPlayer {
 		@Override
 		public void onPageScrolled(int position, float positionOffset,
 				int positionOffsetPixels) {
+			if (mOuterOnPageChangeListener != null) {
+				mOuterOnPageChangeListener.onPageScrolled(position, positionOffset,
+						positionOffsetPixels);
+			}
+
 			if (positionOffset < 0.3) {
 				mNextPage = position;
 			} else if (positionOffset > 0.7) {
@@ -292,6 +306,9 @@ public class ViewPagerPlayer {
 
 		@Override
 		public void onPageScrollStateChanged(int state) {
+			if (mOuterOnPageChangeListener != null) {
+				mOuterOnPageChangeListener.onPageScrollStateChanged(state);
+			}
 		}
 	};
 
