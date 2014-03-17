@@ -8,7 +8,7 @@ import android.graphics.Matrix;
 import android.util.Log;
 import android.view.View;
 
-public class TabletAnimation extends BaseDynamicAnimation {
+public class TabletAnimation implements DynamicAnimation {
 	public static final String TAG = "TabletAnimation";
 
 	private Matrix mMatrix = new Matrix();
@@ -51,7 +51,6 @@ public class TabletAnimation extends BaseDynamicAnimation {
 			State state) {
 		if (state != State.IDLE) {
 			if (left != null) {
-				manageLayer(left, true);
 				float rot = 30.0f * positionOffset;
 				float trans = getOffsetXForRotation(rot, left.getMeasuredWidth(),
 						left.getMeasuredHeight());
@@ -62,7 +61,6 @@ public class TabletAnimation extends BaseDynamicAnimation {
 				logState(left, "Left");
 			}
 			if (right != null) {
-				manageLayer(right, true);
 				float rot = -30.0f * (1 - positionOffset);
 				float trans = getOffsetXForRotation(rot, right.getMeasuredWidth(),
 						right.getMeasuredHeight());

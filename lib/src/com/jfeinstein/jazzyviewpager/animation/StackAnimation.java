@@ -6,7 +6,7 @@ import com.nineoldandroids.view.ViewHelper;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class StackAnimation extends BaseDynamicAnimation {
+public class StackAnimation implements DynamicAnimation {
 	private static final float SCALE_MAX = 0.5f;
 
 	private ViewPager mPager;
@@ -20,7 +20,6 @@ public class StackAnimation extends BaseDynamicAnimation {
 			State state) {
 		if (state != State.IDLE) {
 			if (right != null) {
-				manageLayer(right, true);
 				float scale = (1 - SCALE_MAX) * positionOffset + SCALE_MAX;
 				float trans = positionOffsetPixels - mPager.getWidth() - mPager.getPageMargin();
 				ViewHelper.setScaleX(right, scale);

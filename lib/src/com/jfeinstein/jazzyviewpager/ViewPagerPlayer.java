@@ -44,7 +44,7 @@ public class ViewPagerPlayer {
 	private Map<String, DynamicAnimation> mDynamicMap;
 	private DynamicAnimation mDynamicTransition = new StandardAnimation();
 	private StaticAnimation mStaticTransition = StaticAnimation.NULL;
-	private DynamicAnimation mAnimation = DynamicAnimation.NULL;
+	private StaticAnimation mAnimation = StaticAnimation.NULL;
 
 	private boolean mStarted;
 	private ValueAnimator mAnimator;
@@ -72,6 +72,7 @@ public class ViewPagerPlayer {
 		initDynamicMap();
 		mPager.setClipChildren(false);
 		mPager.setOnPageChangeListener(mOnPageChangeListener);
+		mPager.setAdapter(new ContainerPagerAdapter(mPager.getAdapter(), context));
 	}
 
 	private void initDynamicMap() {
@@ -105,7 +106,7 @@ public class ViewPagerPlayer {
 		mStaticTransition = animation;
 	}
 
-	public void setAnimation(DynamicAnimation animation) {
+	public void setAnimation(StaticAnimation animation) {
 		mAnimation = animation;
 	}
 
@@ -173,18 +174,6 @@ public class ViewPagerPlayer {
 		mAnimator.start();
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void disableHardwareLayer() {
-		if (Build.VERSION.SDK_INT < 11) return;
-
-		for (int i = 0; i < mPager.getChildCount(); i++) {
-			View view = mPager.getChildAt(i);
-			if (view.getLayerType() != View.LAYER_TYPE_NONE) {
-				view.setLayerType(View.LAYER_TYPE_NONE, null);
-			}
-		}
-	}
-
 	private ViewPager.OnPageChangeListener mOnPageChangeListener =
 			new ViewPager.OnPageChangeListener() {
 		@Override
@@ -224,7 +213,6 @@ public class ViewPagerPlayer {
 			mDynamicTransition.animate(left, right, positionOffset, positionOffsetPixels, mState);
 
 			if (effectOffset == 0) {
-				disableHardwareLayer();
 				mState = State.IDLE;
 				mCurrentPage = mNextPage;
 			}

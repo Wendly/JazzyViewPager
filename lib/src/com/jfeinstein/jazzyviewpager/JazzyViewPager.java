@@ -6,11 +6,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -37,6 +35,9 @@ public class JazzyViewPager extends ViewPager {
 
 	public static final String TAG = "JazzyViewPager";
 
+	private Context mContext;
+	private ContainerPagerAdapter mAdapter;
+
 	private boolean mEnabled = true;
 	private boolean mOutlineEnabled = false;
 	private OutlineAnimation mOutlineAnimation = new OutlineAnimation();
@@ -49,17 +50,13 @@ public class JazzyViewPager extends ViewPager {
 	private Method mInfoForPosition;
 	private Field mItemInfoObject;
 
-	private static final boolean API_11;
-	static {
-		API_11 = Build.VERSION.SDK_INT >= 11;
-	}
-
 	public JazzyViewPager(Context context) {
 		this(context, null);
 	}
 
 	public JazzyViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		mContext = context;
 		setClipChildren(false);
 		initDynamicMap();
 		// now style everything!
@@ -119,6 +116,12 @@ public class JazzyViewPager extends ViewPager {
 		sOutlineColor = color;
 	}
 
+	@Override
+	public void setAdapter(PagerAdapter adapter) {
+		mAdapter = new ContainerPagerAdapter(adapter, mContext);
+		super.setAdapter(mAdapter);
+	}
+
 	private void wrapWithOutlines() {
 		for (int i = 0; i < getChildCount(); i++) {
 			View v = getChildAt(i);
@@ -176,17 +179,6 @@ public class JazzyViewPager extends ViewPager {
 		GOING_LEFT,
 		GOING_RIGHT
 	}
-	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void disableHardwareLayer() {
-		if (!API_11) return;
-		View v;
-		for (int i = 0; i < getChildCount(); i++) {
-			v = getChildAt(i);
-			if (v.getLayerType() != View.LAYER_TYPE_NONE)
-				v.setLayerType(View.LAYER_TYPE_NONE, null);
-		}
-	}
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -224,7 +216,6 @@ public class JazzyViewPager extends ViewPager {
 		super.onPageScrolled(position, positionOffset, positionOffsetPixels);
 
 		if (effectOffset == 0) {
-			disableHardwareLayer();
 			mState = State.IDLE;
 			mCurrentPage = mNextPage;
 		}

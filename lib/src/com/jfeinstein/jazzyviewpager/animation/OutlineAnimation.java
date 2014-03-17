@@ -5,7 +5,7 @@ import com.jfeinstein.jazzyviewpager.OutlineContainer;
 
 import android.view.View;
 
-public class OutlineAnimation extends BaseDynamicAnimation {
+public class OutlineAnimation implements DynamicAnimation {
 	public OutlineAnimation() {
 		super();
 	}
@@ -17,11 +17,9 @@ public class OutlineAnimation extends BaseDynamicAnimation {
 
 		if (state != State.IDLE) {
 			if (left != null) {
-				manageLayer(left, true);
 				((OutlineContainer) left).setOutlineAlpha(1.0f);
 			}
 			if (right != null) {
-				manageLayer(right, true);
 				((OutlineContainer) right).setOutlineAlpha(1.0f);
 			}
 		} else {

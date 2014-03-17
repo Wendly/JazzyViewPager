@@ -5,7 +5,7 @@ import com.nineoldandroids.view.ViewHelper;
 
 import android.view.View;
 
-abstract public class CubeAnimation extends BaseDynamicAnimation {
+abstract public class CubeAnimation implements DynamicAnimation {
 	public CubeAnimation() {
 		super();
 	}
@@ -14,14 +14,12 @@ abstract public class CubeAnimation extends BaseDynamicAnimation {
 			State state) {
 		if (state != State.IDLE) {
 			if (left != null) {
-				manageLayer(left, true);
 				float rot = getMaxRot() * positionOffset;
 				ViewHelper.setPivotX(left, left.getMeasuredWidth());
 				ViewHelper.setPivotY(left, left.getMeasuredHeight() * 0.5f);
 				ViewHelper.setRotationY(left, rot);
 			}
 			if (right != null) {
-				manageLayer(right, true);
 				float rot = getMaxRot() * (positionOffset - 1);
 				ViewHelper.setPivotX(right, 0);
 				ViewHelper.setPivotY(right, right.getMeasuredHeight() * 0.5f);

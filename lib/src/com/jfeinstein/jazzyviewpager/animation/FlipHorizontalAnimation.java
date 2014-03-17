@@ -7,7 +7,7 @@ import com.nineoldandroids.view.ViewHelper;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class FlipHorizontalAnimation extends BaseDynamicAnimation {
+public class FlipHorizontalAnimation implements DynamicAnimation {
 	private ViewPager mPager;
 
 	public FlipHorizontalAnimation(ViewPager pager) {
@@ -19,7 +19,6 @@ public class FlipHorizontalAnimation extends BaseDynamicAnimation {
 			State state) {
 		if (state != State.IDLE) {
 			if (left != null) {
-				manageLayer(left, true);
 				float rot = 180.0f * positionOffset;
 				if (rot > 90.0f) {
 					left.setVisibility(View.INVISIBLE);
@@ -36,7 +35,6 @@ public class FlipHorizontalAnimation extends BaseDynamicAnimation {
 				}
 			}
 			if (right != null) {
-				manageLayer(right, true);
 				float rot = -180.0f * (1-positionOffset);
 				if (rot < -90.0f) {
 					right.setVisibility(View.INVISIBLE);

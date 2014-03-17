@@ -5,7 +5,7 @@ import android.view.View;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
 import com.nineoldandroids.view.ViewHelper;
 
-abstract public class ZoomAnimation extends BaseDynamicAnimation {
+abstract public class ZoomAnimation implements DynamicAnimation {
 	protected float mZoomMax;
 	protected float mPivotX;
 	protected float mPivotY;
@@ -37,7 +37,6 @@ abstract public class ZoomAnimation extends BaseDynamicAnimation {
 			State state) {
 		if (state != State.IDLE) {
 			if (left != null) {
-				manageLayer(left, true);
 				float scale = getLeftScale(positionOffset);
 				ViewHelper.setPivotX(left, left.getMeasuredWidth() * mPivotX);
 				ViewHelper.setPivotY(left, left.getMeasuredHeight() * mPivotY);
@@ -45,7 +44,6 @@ abstract public class ZoomAnimation extends BaseDynamicAnimation {
 				ViewHelper.setScaleY(left, scale);
 			}
 			if (right != null) {
-				manageLayer(right, true);
 				float scale = getRightScale(positionOffset);
 				ViewHelper.setPivotX(right, right.getMeasuredWidth() * mPivotX);
 				ViewHelper.setPivotY(right, right.getMeasuredHeight() * mPivotY);

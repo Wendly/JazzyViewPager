@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
 
-public class StandardAnimation extends BaseDynamicAnimation {
+public class StandardAnimation implements DynamicAnimation {
 	public StandardAnimation() {
 		super();
 	}

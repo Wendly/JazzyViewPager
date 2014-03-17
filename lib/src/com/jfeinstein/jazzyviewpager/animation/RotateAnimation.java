@@ -6,7 +6,7 @@ import android.view.View;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
 import com.nineoldandroids.view.ViewHelper;
 
-abstract public class RotateAnimation extends BaseDynamicAnimation {
+abstract public class RotateAnimation implements DynamicAnimation {
 	private static final float ROT_MAX = 15.0f;
 
 	private ViewPager mPager;
@@ -20,7 +20,6 @@ abstract public class RotateAnimation extends BaseDynamicAnimation {
 			State state) {
 		if (state != State.IDLE) {
 			if (left != null) {
-				manageLayer(left, true);
 				float rot = (isRotateUp() ? 1 : -1) * (ROT_MAX * positionOffset);
 				float trans = (isRotateUp() ? -1 : 1) * (float) (mPager.getMeasuredHeight() -
 						mPager.getMeasuredHeight() * Math.cos(rot * Math.PI / 180.0f));
@@ -30,7 +29,6 @@ abstract public class RotateAnimation extends BaseDynamicAnimation {
 				ViewHelper.setRotation(left, rot);
 			}
 			if (right != null) {
-				manageLayer(right, true);
 				float rot = (isRotateUp() ? 1 : -1) * (-ROT_MAX + ROT_MAX * positionOffset);
 				float trans = (isRotateUp() ? -1 : 1) * (float) (mPager.getMeasuredHeight() -
 						mPager.getMeasuredHeight() * Math.cos(rot * Math.PI / 180.0f));
