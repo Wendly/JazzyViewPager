@@ -11,6 +11,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -42,6 +43,7 @@ public class ViewPagerPlayer {
 
 	private Context mContext;
 	private boolean mOutlineEnabled;
+	private int mOutlineColor;
 
 	private Map<String, DynamicTransition> mDynamicMap;
 	private DynamicTransition mDynamicTransition = new StandardTransition();
@@ -71,6 +73,7 @@ public class ViewPagerPlayer {
 		mRepeatCount = 0;
 		mRepeatMode = ValueAnimator.REVERSE;
 		mOutlineEnabled = false;
+		mOutlineColor = Color.WHITE;
 
 		setupScroller();
 		initDynamicMap();
@@ -81,6 +84,11 @@ public class ViewPagerPlayer {
 
 	public void setOutlineEnabled(boolean enabled) {
 		mOutlineEnabled = enabled;
+		updateAdapter();
+	}
+
+	public void setOutlineColor(int color) {
+		mOutlineColor = color;
 		updateAdapter();
 	}
 
@@ -100,6 +108,7 @@ public class ViewPagerPlayer {
 		if (adapter != null) {
 			if (mOutlineEnabled) {
 				mAdapter = new OutlinePagerAdapter(adapter, mContext);
+				((OutlinePagerAdapter) mAdapter).setColor(mOutlineColor);
 			} else {
 				mAdapter = new ContainerPagerAdapter(adapter, mContext);
 			}

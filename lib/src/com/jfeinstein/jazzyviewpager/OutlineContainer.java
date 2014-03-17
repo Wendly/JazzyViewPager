@@ -2,6 +2,7 @@ package com.jfeinstein.jazzyviewpager;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
@@ -18,6 +19,7 @@ public class OutlineContainer extends FrameLayout implements Animatable {
 	private boolean mIsRunning = false;
     private long mStartTime;
 	private float mAlpha = 1.0f;
+	private int mColor = Color.WHITE;
 	private static final long ANIMATION_DURATION = 500;
 	private static final long FRAME_DURATION = 1000 / 60;
 	private final Interpolator mInterpolator = new Interpolator() {
@@ -40,6 +42,10 @@ public class OutlineContainer extends FrameLayout implements Animatable {
 		init();
 	}
 
+	public void setColor(int color) {
+		mColor = color;
+	}
+
 	private void init() {
 		mOutlinePaint = new Paint();
 		mOutlinePaint.setAntiAlias(true);
@@ -55,8 +61,8 @@ public class OutlineContainer extends FrameLayout implements Animatable {
 	protected void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
 		int offset = Util.dpToPx(getResources(), 5);
-		if (mOutlinePaint.getColor() != JazzyViewPager.sOutlineColor) {
-			mOutlinePaint.setColor(JazzyViewPager.sOutlineColor);
+		if (mOutlinePaint.getColor() != mColor) {
+			mOutlinePaint.setColor(mColor);
 		}
 		mOutlinePaint.setAlpha((int)(mAlpha * 255));
 		Rect rect = new Rect(offset, offset, getMeasuredWidth()-offset, getMeasuredHeight()-offset);

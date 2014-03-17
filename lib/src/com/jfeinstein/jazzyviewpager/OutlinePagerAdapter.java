@@ -1,11 +1,14 @@
 package com.jfeinstein.jazzyviewpager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class OutlinePagerAdapter extends ContainerPagerAdapter {
+	private int mColor = Color.WHITE;
+
 	public OutlinePagerAdapter(PagerAdapter adapter, Context context) {
 		super(adapter, context);
 	}
@@ -15,6 +18,12 @@ public class OutlinePagerAdapter extends ContainerPagerAdapter {
 	}
 
 	protected ViewGroup getContainer(Context context) {
-		return new OutlineContainer(context);
+		OutlineContainer container = new OutlineContainer(context);
+		container.setColor(mColor);
+		return container;
+	}
+
+	public void setColor(int color) {
+		mColor = color;
 	}
 }

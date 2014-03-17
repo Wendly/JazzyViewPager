@@ -41,7 +41,7 @@ public class JazzyViewPager extends ViewPager {
 	private boolean mEnabled = true;
 	private boolean mOutlineEnabled = false;
 	private OutlineTransition mOutlineTransition = new OutlineTransition();
-	public static int sOutlineColor = Color.WHITE;
+	private int mOutlineColor = Color.WHITE;
 
 	private DynamicTransition mDynamicTransition = DynamicTransition.NULL;
 	private Map<String, DynamicTransition> mDynamicMap;
@@ -113,7 +113,7 @@ public class JazzyViewPager extends ViewPager {
 	}
 
 	public void setOutlineColor(int color) {
-		sOutlineColor = color;
+		mOutlineColor = color;
 		updateAdapter();
 	}
 
@@ -134,6 +134,7 @@ public class JazzyViewPager extends ViewPager {
 		if (adapter != null) {
 			if (mOutlineEnabled) {
 				mAdapter = new OutlinePagerAdapter(adapter, mContext);
+				((OutlinePagerAdapter) mAdapter).setColor(mOutlineColor);
 			} else {
 				mAdapter = new ContainerPagerAdapter(adapter, mContext);
 			}
