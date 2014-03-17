@@ -39,7 +39,7 @@ public class ContainerPagerAdapter extends PagerAdapterWrapper {
 		int index = container.indexOfChild(view);
 		container.removeView(view);
 
-		FrameLayout dynamicLayer = new DynamicLayout(mContext);
+		ViewGroup dynamicLayer = getContainer(mContext);
 		dynamicLayer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
@@ -82,7 +82,7 @@ public class ContainerPagerAdapter extends PagerAdapterWrapper {
 
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
-		if (view instanceof DynamicLayout) {
+		if (isOurContainer(view)) {
 			return super.isViewFromObject(((ViewGroup) view).getChildAt(0), object);
 		} else {
 			return super.isViewFromObject(view, object);
@@ -99,6 +99,14 @@ public class ContainerPagerAdapter extends PagerAdapterWrapper {
 			view = null;
 		}
 		return view;
+	}
+
+	protected boolean isOurContainer(View view) {
+		return DynamicLayout.class.isInstance(view);
+	}
+
+	protected ViewGroup getContainer(Context context) {
+		return new DynamicLayout(context);
 	}
 
 	private class DynamicLayout extends FrameLayout {

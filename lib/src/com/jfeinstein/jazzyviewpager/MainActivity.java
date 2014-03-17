@@ -58,6 +58,7 @@ public class MainActivity extends Activity {
 		mJazzy.setDynamicTransition(transition);
 		mJazzy.setAdapter(new MainAdapter());
 		mJazzy.setPageMargin(30);
+		mJazzy.setOutlineEnabled(true);
 	}
 
 	private class MainAdapter extends PagerAdapter {
@@ -78,19 +79,28 @@ public class MainActivity extends Activity {
 		}
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object obj) {
-			container.removeView(mJazzy.findViewFromObject(obj));
+			container.removeView(findViewFromObject(container, obj));
 		}
+
+		private View findViewFromObject(ViewGroup container, Object object) {
+			View view = null;
+			for (int i = 0; i < container.getChildCount(); i++) {
+				view = container.getChildAt(i);
+				if (isViewFromObject(view, object)) {
+					break;
+				}
+				view = null;
+			}
+			return view;
+		}
+
 		@Override
 		public int getCount() {
 			return 10;
 		}
 		@Override
 		public boolean isViewFromObject(View view, Object obj) {
-			if (view instanceof OutlineContainer) {
-				return ((OutlineContainer) view).getChildAt(0) == obj;
-			} else {
-				return view == obj;
-			}
-		}		
+			return view == obj;
+		}
 	}
 }

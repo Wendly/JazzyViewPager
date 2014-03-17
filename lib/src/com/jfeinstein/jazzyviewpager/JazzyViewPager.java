@@ -109,57 +109,38 @@ public class JazzyViewPager extends ViewPager {
 
 	public void setOutlineEnabled(boolean enabled) {
 		mOutlineEnabled = enabled;
-		wrapWithOutlines();
+		updateAdapter();
 	}
 
 	public void setOutlineColor(int color) {
 		sOutlineColor = color;
+		updateAdapter();
 	}
 
 	@Override
 	public void setAdapter(PagerAdapter adapter) {
-		mAdapter = new ContainerPagerAdapter(adapter, mContext);
-		super.setAdapter(mAdapter);
+		updateAdapter(adapter);
 	}
 
-	private void wrapWithOutlines() {
-		for (int i = 0; i < getChildCount(); i++) {
-			View v = getChildAt(i);
-			if (!(v instanceof OutlineContainer)) {
-				removeView(v);
-				super.addView(wrapChild(v), i);
-			}
+	private void updateAdapter() {
+		if (mAdapter != null) {
+			updateAdapter(mAdapter.getAdapter());
+		} else {
+			updateAdapter(this.getAdapter());
 		}
 	}
 
-	private View wrapChild(View child) {
-		if (!mOutlineEnabled || child instanceof OutlineContainer) return child;
-		OutlineContainer out = new OutlineContainer(getContext());
-		out.setLayoutParams(generateDefaultLayoutParams());
-		child.setLayoutParams(new OutlineContainer.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		out.addView(child);
-		return out;
-	}
-
-	public void addView(View child) {
-		super.addView(wrapChild(child));
-	}
-
-	public void addView(View child, int index) {
-		super.addView(wrapChild(child), index);
-	}
-
-	public void addView(View child, LayoutParams params) {
-		super.addView(wrapChild(child), params);
-	}
-
-	public void addView(View child, int width, int height) {
-		super.addView(wrapChild(child), width, height);
-	}
-
-	public void addView(View child, int index, LayoutParams params) {
-		super.addView(wrapChild(child), index, params);
+	private void updateAdapter(PagerAdapter adapter) {
+		if (adapter != null) {
+			if (mOutlineEnabled) {
+				mAdapter = new OutlinePagerAdapter(adapter, mContext);
+			} else {
+				mAdapter = new ContainerPagerAdapter(adapter, mContext);
+			}
+			super.setAdapter(mAdapter);
+		} else {
+			super.setAdapter(adapter);
+		}
 	}
 
 	@Override

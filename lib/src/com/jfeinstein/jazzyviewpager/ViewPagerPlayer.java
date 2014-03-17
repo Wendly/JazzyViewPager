@@ -41,6 +41,7 @@ public class ViewPagerPlayer {
 	public static final String TAG = "ViewPagerPlayer";
 
 	private Context mContext;
+	private boolean mOutlineEnabled;
 
 	private Map<String, DynamicTransition> mDynamicMap;
 	private DynamicTransition mDynamicTransition = new StandardTransition();
@@ -56,6 +57,7 @@ public class ViewPagerPlayer {
 	private Method mInfoForPosition;
 	private Field mItemInfoObject;
 	private ViewPager mPager;
+	private ContainerPagerAdapter mAdapter;
 
 	private State mState;
 	private int mCurrentPage;
@@ -68,12 +70,43 @@ public class ViewPagerPlayer {
 		mDuration = 30000;
 		mRepeatCount = 0;
 		mRepeatMode = ValueAnimator.REVERSE;
+		mOutlineEnabled = false;
 
 		setupScroller();
 		initDynamicMap();
 		mPager.setClipChildren(false);
 		mPager.setOnPageChangeListener(mOnPageChangeListener);
-		mPager.setAdapter(new ContainerPagerAdapter(mPager.getAdapter(), context));
+		updateAdapter();
+	}
+
+	public void setOutlineEnabled(boolean enabled) {
+		mOutlineEnabled = enabled;
+		updateAdapter();
+	}
+
+	public void setAdapter(PagerAdapter adapter) {
+		updateAdapter(adapter);
+	}
+
+	private void updateAdapter() {
+		if (mAdapter != null) {
+			updateAdapter(mAdapter.getAdapter());
+		} else {
+			updateAdapter(mPager.getAdapter());
+		}
+	}
+
+	private void updateAdapter(PagerAdapter adapter) {
+		if (adapter != null) {
+			if (mOutlineEnabled) {
+				mAdapter = new OutlinePagerAdapter(adapter, mContext);
+			} else {
+				mAdapter = new ContainerPagerAdapter(adapter, mContext);
+			}
+			mPager.setAdapter(mAdapter);
+		} else {
+			mPager.setAdapter(adapter);
+		}
 	}
 
 	private void initDynamicMap() {
