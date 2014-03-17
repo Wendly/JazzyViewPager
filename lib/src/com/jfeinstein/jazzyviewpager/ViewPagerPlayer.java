@@ -15,7 +15,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -44,6 +46,7 @@ public class ViewPagerPlayer {
 	private Context mContext;
 	private boolean mOutlineEnabled;
 	private int mOutlineColor;
+	private boolean mEnabled;
 
 	private Map<String, DynamicTransition> mDynamicMap;
 	private DynamicTransition mDynamicTransition = new StandardTransition();
@@ -60,6 +63,7 @@ public class ViewPagerPlayer {
 	private Field mItemInfoObject;
 	private ViewPager mPager;
 	private ContainerPagerAdapter mAdapter;
+	private OnTouchListener mOuterOnTouchListener;
 
 	private State mState;
 	private int mCurrentPage;
@@ -74,12 +78,18 @@ public class ViewPagerPlayer {
 		mRepeatMode = ValueAnimator.REVERSE;
 		mOutlineEnabled = false;
 		mOutlineColor = Color.WHITE;
+		mEnabled = true;
 
 		setupScroller();
 		initDynamicMap();
 		mPager.setClipChildren(false);
 		mPager.setOnPageChangeListener(mOnPageChangeListener);
+		mPager.setOnTouchListener(mOnTouchListener);
 		updateAdapter();
+	}
+
+	public void setPagingEnabled(boolean enabled) {
+		mEnabled = enabled;
 	}
 
 	public void setOutlineEnabled(boolean enabled) {
@@ -216,6 +226,25 @@ public class ViewPagerPlayer {
 
 		mAnimator.start();
 	}
+
+	public void setOnTouchListener(OnTouchListener listener) {
+		mOuterOnTouchListener = listener;
+	}
+
+	private OnTouchListener mOnTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if (mEnabled) {
+				if (mOuterOnTouchListener != null) {
+					return mOuterOnTouchListener.onTouch(v, event);
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		}
+	};
 
 	private ViewPager.OnPageChangeListener mOnPageChangeListener =
 			new ViewPager.OnPageChangeListener() {
