@@ -6,12 +6,12 @@ import android.view.View;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
 import com.nineoldandroids.view.ViewHelper;
 
-abstract public class RotateAnimation implements DynamicAnimation {
+abstract public class RotateTransition implements DynamicTransition {
 	private static final float ROT_MAX = 15.0f;
 
 	private ViewPager mPager;
 
-	public RotateAnimation(ViewPager pager) {
+	public RotateTransition(ViewPager pager) {
 		super();
 		mPager = pager;
 	}

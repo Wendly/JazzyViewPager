@@ -6,12 +6,12 @@ import com.nineoldandroids.view.ViewHelper;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class StackAnimation implements DynamicAnimation {
+public class StackTransition implements DynamicTransition {
 	private static final float SCALE_MAX = 0.5f;
 
 	private ViewPager mPager;
 
-	public StackAnimation(ViewPager pager) {
+	public StackTransition(ViewPager pager) {
 		super();
 		mPager = pager;
 	}

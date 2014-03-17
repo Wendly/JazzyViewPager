@@ -4,8 +4,8 @@ import android.view.View;
 
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
 
-public class StandardAnimation implements DynamicAnimation {
-	public StandardAnimation() {
+public class StandardTransition implements DynamicTransition {
+	public StandardTransition() {
 		super();
 	}
 

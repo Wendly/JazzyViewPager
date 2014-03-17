@@ -15,21 +15,21 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.jfeinstein.jazzyviewpager.animation.AccordionAnimation;
-import com.jfeinstein.jazzyviewpager.animation.CubeInAnimation;
-import com.jfeinstein.jazzyviewpager.animation.CubeOutAnimation;
-import com.jfeinstein.jazzyviewpager.animation.DynamicAnimation;
-import com.jfeinstein.jazzyviewpager.animation.FadeAnimation;
-import com.jfeinstein.jazzyviewpager.animation.FlipHorizontalAnimation;
-import com.jfeinstein.jazzyviewpager.animation.FlipVerticalAnimation;
-import com.jfeinstein.jazzyviewpager.animation.RotateDownAnimation;
-import com.jfeinstein.jazzyviewpager.animation.RotateUpAnimation;
-import com.jfeinstein.jazzyviewpager.animation.StackAnimation;
-import com.jfeinstein.jazzyviewpager.animation.StaticAnimation;
-import com.jfeinstein.jazzyviewpager.animation.TabletAnimation;
-import com.jfeinstein.jazzyviewpager.animation.ZoomInAnimation;
-import com.jfeinstein.jazzyviewpager.animation.ZoomOutAnimation;
-import com.jfeinstein.jazzyviewpager.animation.OutlineAnimation;
+import com.jfeinstein.jazzyviewpager.animation.AccordionTransition;
+import com.jfeinstein.jazzyviewpager.animation.CubeInTransition;
+import com.jfeinstein.jazzyviewpager.animation.CubeOutTransition;
+import com.jfeinstein.jazzyviewpager.animation.DynamicTransition;
+import com.jfeinstein.jazzyviewpager.animation.FadeTransition;
+import com.jfeinstein.jazzyviewpager.animation.FlipHorizontalTransition;
+import com.jfeinstein.jazzyviewpager.animation.FlipVerticalTransition;
+import com.jfeinstein.jazzyviewpager.animation.RotateDownTransition;
+import com.jfeinstein.jazzyviewpager.animation.RotateUpTransition;
+import com.jfeinstein.jazzyviewpager.animation.StackTransition;
+import com.jfeinstein.jazzyviewpager.animation.StaticTransition;
+import com.jfeinstein.jazzyviewpager.animation.TabletTransition;
+import com.jfeinstein.jazzyviewpager.animation.ZoomInTransition;
+import com.jfeinstein.jazzyviewpager.animation.ZoomOutTransition;
+import com.jfeinstein.jazzyviewpager.animation.OutlineTransition;
 
 public class JazzyViewPager extends ViewPager {
 
@@ -40,12 +40,12 @@ public class JazzyViewPager extends ViewPager {
 
 	private boolean mEnabled = true;
 	private boolean mOutlineEnabled = false;
-	private OutlineAnimation mOutlineAnimation = new OutlineAnimation();
+	private OutlineTransition mOutlineTransition = new OutlineTransition();
 	public static int sOutlineColor = Color.WHITE;
 
-	private DynamicAnimation mDynamicAnimation = DynamicAnimation.NULL;
-	private Map<String, DynamicAnimation> mDynamicMap;
-	private StaticAnimation mStaticAnimation = StaticAnimation.NULL;
+	private DynamicTransition mDynamicTransition = DynamicTransition.NULL;
+	private Map<String, DynamicTransition> mDynamicMap;
+	private StaticTransition mStaticTransition = StaticTransition.NULL;
 	
 	private Method mInfoForPosition;
 	private Field mItemInfoObject;
@@ -63,9 +63,9 @@ public class JazzyViewPager extends ViewPager {
 		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.JazzyViewPager);
 		int effect = ta.getInt(R.styleable.JazzyViewPager_style, 0);
 		String[] transitions = getResources().getStringArray(R.array.jazzy_effects);
-		setDynamicAnimation(findDynamicAnimation(transitions[effect]));
+		setDynamicTransition(findDynamicTransition(transitions[effect]));
 		if (ta.getBoolean(R.styleable.JazzyViewPager_fadeEnabled, false)) {
-			setStaticAnimation(new FadeAnimation());
+			setStaticTransition(new FadeTransition());
 		}
 		setOutlineEnabled(ta.getBoolean(R.styleable.JazzyViewPager_outlineEnabled, false));
 		setOutlineColor(ta.getColor(R.styleable.JazzyViewPager_outlineColor, Color.WHITE));
@@ -73,34 +73,34 @@ public class JazzyViewPager extends ViewPager {
 	}
 
 	private void initDynamicMap() {
-		mDynamicMap = new HashMap<String, DynamicAnimation>();
-		mDynamicMap.put("Tablet", new TabletAnimation());
-		mDynamicMap.put("CubeIn", new CubeInAnimation());
-		mDynamicMap.put("CubeOut", new CubeOutAnimation());
-		mDynamicMap.put("FlipVertical", new FlipVerticalAnimation(this));
-		mDynamicMap.put("FlipHorizontal", new FlipHorizontalAnimation(this));
-		mDynamicMap.put("Stack", new StackAnimation(this));
-		mDynamicMap.put("ZoomIn", new ZoomInAnimation());
-		mDynamicMap.put("ZoomOut", new ZoomOutAnimation());
-		mDynamicMap.put("RotateUp", new RotateUpAnimation(this));
-		mDynamicMap.put("RotateDown", new RotateDownAnimation(this));
-		mDynamicMap.put("Accordion", new AccordionAnimation());
+		mDynamicMap = new HashMap<String, DynamicTransition>();
+		mDynamicMap.put("Tablet", new TabletTransition());
+		mDynamicMap.put("CubeIn", new CubeInTransition());
+		mDynamicMap.put("CubeOut", new CubeOutTransition());
+		mDynamicMap.put("FlipVertical", new FlipVerticalTransition(this));
+		mDynamicMap.put("FlipHorizontal", new FlipHorizontalTransition(this));
+		mDynamicMap.put("Stack", new StackTransition(this));
+		mDynamicMap.put("ZoomIn", new ZoomInTransition());
+		mDynamicMap.put("ZoomOut", new ZoomOutTransition());
+		mDynamicMap.put("RotateUp", new RotateUpTransition(this));
+		mDynamicMap.put("RotateDown", new RotateDownTransition(this));
+		mDynamicMap.put("Accordion", new AccordionTransition());
 	}
 
-	public DynamicAnimation findDynamicAnimation(String name) {
-		DynamicAnimation animation = DynamicAnimation.NULL;
+	public DynamicTransition findDynamicTransition(String name) {
+		DynamicTransition transition = DynamicTransition.NULL;
 		if (mDynamicMap.get(name) != null) {
-			animation = mDynamicMap.get(name);
+			transition = mDynamicMap.get(name);
 		}
-		return animation;
+		return transition;
 	}
 
-	public void setDynamicAnimation(DynamicAnimation animation) {
-		mDynamicAnimation = animation;
+	public void setDynamicTransition(DynamicTransition transition) {
+		mDynamicTransition = transition;
 	}
 
-	public void setStaticAnimation(StaticAnimation animation) {
-		mStaticAnimation = animation;
+	public void setStaticTransition(StaticTransition transition) {
+		mStaticTransition = transition;
 	}
 
 	public void setPagingEnabled(boolean enabled) {
@@ -205,13 +205,13 @@ public class JazzyViewPager extends ViewPager {
 		mLeft = findViewFromPosition(position);
 		mRight = findViewFromPosition(position + 1);
 
-		mStaticAnimation.animate(mLeft, mRight, effectOffset, positionOffsetPixels, mState);
+		mStaticTransition.animate(mLeft, mRight, effectOffset, positionOffsetPixels, mState);
 
 		if (mOutlineEnabled) {
-			mOutlineAnimation.animate(mLeft, mRight, effectOffset, positionOffsetPixels, mState);
+			mOutlineTransition.animate(mLeft, mRight, effectOffset, positionOffsetPixels, mState);
 		}
 
-		mDynamicAnimation.animate(mLeft, mRight, positionOffset, positionOffsetPixels, mState);
+		mDynamicTransition.animate(mLeft, mRight, positionOffset, positionOffsetPixels, mState);
 
 		super.onPageScrolled(position, positionOffset, positionOffsetPixels);
 

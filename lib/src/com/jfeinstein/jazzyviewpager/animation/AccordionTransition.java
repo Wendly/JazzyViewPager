@@ -5,8 +5,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 import android.view.View;
 
-public class AccordionAnimation implements DynamicAnimation {
-	public AccordionAnimation() {
+public class AccordionTransition implements DynamicTransition {
+	public AccordionTransition() {
 		super();
 	}
 

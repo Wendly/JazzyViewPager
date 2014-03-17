@@ -5,8 +5,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 import android.view.View;
 
-abstract public class CubeAnimation implements DynamicAnimation {
-	public CubeAnimation() {
+abstract public class CubeTransition implements DynamicTransition {
+	public CubeTransition() {
 		super();
 	}
 

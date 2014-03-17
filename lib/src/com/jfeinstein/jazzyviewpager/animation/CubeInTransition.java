@@ -1,7 +1,7 @@
 package com.jfeinstein.jazzyviewpager.animation;
 
-public class CubeInAnimation extends CubeAnimation {
-	public CubeInAnimation() {
+public class CubeInTransition extends CubeTransition {
+	public CubeInTransition() {
 		super();
 	}
 

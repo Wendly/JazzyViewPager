@@ -6,10 +6,10 @@ import com.nineoldandroids.view.ViewHelper;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class FlipVerticalAnimation implements DynamicAnimation {
+public class FlipVerticalTransition implements DynamicTransition {
 	private ViewPager mPager;
 
-	public FlipVerticalAnimation(ViewPager pager) {
+	public FlipVerticalTransition(ViewPager pager) {
 		super();
 		mPager = pager;
 	}

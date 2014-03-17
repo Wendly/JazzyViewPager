@@ -8,13 +8,13 @@ import android.graphics.Matrix;
 import android.util.Log;
 import android.view.View;
 
-public class TabletAnimation implements DynamicAnimation {
-	public static final String TAG = "TabletAnimation";
+public class TabletTransition implements DynamicTransition {
+	public static final String TAG = "TabletTransition";
 
 	private Matrix mMatrix = new Matrix();
 	private Camera mCamera = new Camera();
 
-	public TabletAnimation() {
+	public TabletTransition() {
 		super();
 	}
 

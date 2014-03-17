@@ -14,12 +14,7 @@ public class ZoomOutAnimation extends ZoomAnimation {
 	}
 
 	@Override
-	protected float getLeftScale(float positionOffset) {
+	protected float getScale(float positionOffset) {
 		return 1 + mZoomMax - (mZoomMax * (1 - positionOffset));
-	}
-
-	@Override
-	protected float getRightScale(float positionOffset) {
-		return 1 + mZoomMax - (mZoomMax * positionOffset);
 	}
 }

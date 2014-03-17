@@ -5,8 +5,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 import android.view.View;
 
-public class FadeAnimation implements StaticAnimation {
-	public FadeAnimation() {
+public class FadeTransition implements StaticTransition {
+	public FadeTransition() {
 		super();
 	}
 

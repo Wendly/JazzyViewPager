@@ -5,8 +5,8 @@ import com.jfeinstein.jazzyviewpager.OutlineContainer;
 
 import android.view.View;
 
-public class OutlineAnimation implements DynamicAnimation {
-	public OutlineAnimation() {
+public class OutlineTransition implements DynamicTransition {
+	public OutlineTransition() {
 		super();
 	}
 

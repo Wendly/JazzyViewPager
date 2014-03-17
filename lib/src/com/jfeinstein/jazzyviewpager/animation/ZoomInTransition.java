@@ -1,15 +1,15 @@
 package com.jfeinstein.jazzyviewpager.animation;
 
-public class ZoomInAnimation extends ZoomAnimation {
-	public ZoomInAnimation() {
+public class ZoomInTransition extends ZoomTransition {
+	public ZoomInTransition() {
         super();
     }
 
-	public ZoomInAnimation(float zoomMax) {
+	public ZoomInTransition(float zoomMax) {
 		super(zoomMax);
 	}
 
-	public ZoomInAnimation(float zoomMax, float pivotX, float pivotY) {
+	public ZoomInTransition(float zoomMax, float pivotX, float pivotY) {
 		super(zoomMax, pivotX, pivotY);
 	}
 

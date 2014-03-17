@@ -1,8 +1,8 @@
 package com.jfeinstein.jazzyviewpager;
 
-import com.jfeinstein.jazzyviewpager.animation.DynamicAnimation;
-import com.jfeinstein.jazzyviewpager.animation.FadeAnimation;
-import com.jfeinstein.jazzyviewpager.animation.StaticAnimation;
+import com.jfeinstein.jazzyviewpager.animation.DynamicTransition;
+import com.jfeinstein.jazzyviewpager.animation.FadeTransition;
+import com.jfeinstein.jazzyviewpager.animation.StaticTransition;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		mJazzy = (JazzyViewPager) findViewById(R.id.jazzy_pager);
 
-		setupJazziness(mJazzy.findDynamicAnimation("Tablet"));
+		setupJazziness(mJazzy.findDynamicTransition("Tablet"));
 	}
 
 	@Override
@@ -43,19 +43,19 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().toString().equals("Toggle Fade")) {
 			if (!mFadeEnabled) {
-				mJazzy.setStaticAnimation(StaticAnimation.NULL);
+				mJazzy.setStaticTransition(StaticTransition.NULL);
 			} else {
-				mJazzy.setStaticAnimation(new FadeAnimation());
+				mJazzy.setStaticTransition(new FadeTransition());
 			}
 			mFadeEnabled = !mFadeEnabled;
 		} else {
-			setupJazziness(mJazzy.findDynamicAnimation(item.getTitle().toString()));
+			setupJazziness(mJazzy.findDynamicTransition(item.getTitle().toString()));
 		}
 		return true;
 	}
 
-	private void setupJazziness(DynamicAnimation animation) {
-		mJazzy.setDynamicAnimation(animation);
+	private void setupJazziness(DynamicTransition transition) {
+		mJazzy.setDynamicTransition(transition);
 		mJazzy.setAdapter(new MainAdapter());
 		mJazzy.setPageMargin(30);
 	}

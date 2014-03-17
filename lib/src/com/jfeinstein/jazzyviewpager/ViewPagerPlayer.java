@@ -19,20 +19,21 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.State;
-import com.jfeinstein.jazzyviewpager.animation.AccordionAnimation;
-import com.jfeinstein.jazzyviewpager.animation.CubeInAnimation;
-import com.jfeinstein.jazzyviewpager.animation.CubeOutAnimation;
-import com.jfeinstein.jazzyviewpager.animation.DynamicAnimation;
-import com.jfeinstein.jazzyviewpager.animation.FlipHorizontalAnimation;
-import com.jfeinstein.jazzyviewpager.animation.FlipVerticalAnimation;
-import com.jfeinstein.jazzyviewpager.animation.RotateDownAnimation;
-import com.jfeinstein.jazzyviewpager.animation.RotateUpAnimation;
-import com.jfeinstein.jazzyviewpager.animation.StackAnimation;
-import com.jfeinstein.jazzyviewpager.animation.StandardAnimation;
-import com.jfeinstein.jazzyviewpager.animation.StaticAnimation;
-import com.jfeinstein.jazzyviewpager.animation.TabletAnimation;
-import com.jfeinstein.jazzyviewpager.animation.ZoomInAnimation;
-import com.jfeinstein.jazzyviewpager.animation.ZoomOutAnimation;
+import com.jfeinstein.jazzyviewpager.animation.AccordionTransition;
+import com.jfeinstein.jazzyviewpager.animation.Animation;
+import com.jfeinstein.jazzyviewpager.animation.CubeInTransition;
+import com.jfeinstein.jazzyviewpager.animation.CubeOutTransition;
+import com.jfeinstein.jazzyviewpager.animation.DynamicTransition;
+import com.jfeinstein.jazzyviewpager.animation.FlipHorizontalTransition;
+import com.jfeinstein.jazzyviewpager.animation.FlipVerticalTransition;
+import com.jfeinstein.jazzyviewpager.animation.RotateDownTransition;
+import com.jfeinstein.jazzyviewpager.animation.RotateUpTransition;
+import com.jfeinstein.jazzyviewpager.animation.StackTransition;
+import com.jfeinstein.jazzyviewpager.animation.StandardTransition;
+import com.jfeinstein.jazzyviewpager.animation.StaticTransition;
+import com.jfeinstein.jazzyviewpager.animation.TabletTransition;
+import com.jfeinstein.jazzyviewpager.animation.ZoomInTransition;
+import com.jfeinstein.jazzyviewpager.animation.ZoomOutTransition;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ViewPagerPlayer {
@@ -41,10 +42,10 @@ public class ViewPagerPlayer {
 
 	private Context mContext;
 
-	private Map<String, DynamicAnimation> mDynamicMap;
-	private DynamicAnimation mDynamicTransition = new StandardAnimation();
-	private StaticAnimation mStaticTransition = StaticAnimation.NULL;
-	private StaticAnimation mAnimation = StaticAnimation.NULL;
+	private Map<String, DynamicTransition> mDynamicMap;
+	private DynamicTransition mDynamicTransition = new StandardTransition();
+	private StaticTransition mStaticTransition = StaticTransition.NULL;
+	private Animation mAnimation = Animation.NULL;
 
 	private boolean mStarted;
 	private ValueAnimator mAnimator;
@@ -76,37 +77,37 @@ public class ViewPagerPlayer {
 	}
 
 	private void initDynamicMap() {
-		mDynamicMap = new HashMap<String, DynamicAnimation>();
-		mDynamicMap.put("Tablet", new TabletAnimation());
-		mDynamicMap.put("CubeIn", new CubeInAnimation());
-		mDynamicMap.put("CubeOut", new CubeOutAnimation());
-		mDynamicMap.put("FlipVertical", new FlipVerticalAnimation(mPager));
-		mDynamicMap.put("FlipHorizontal", new FlipHorizontalAnimation(mPager));
-		mDynamicMap.put("Stack", new StackAnimation(mPager));
-		mDynamicMap.put("ZoomIn", new ZoomInAnimation());
-		mDynamicMap.put("ZoomOut", new ZoomOutAnimation());
-		mDynamicMap.put("RotateUp", new RotateUpAnimation(mPager));
-		mDynamicMap.put("RotateDown", new RotateDownAnimation(mPager));
-		mDynamicMap.put("Accordion", new AccordionAnimation());
+		mDynamicMap = new HashMap<String, DynamicTransition>();
+		mDynamicMap.put("Tablet", new TabletTransition());
+		mDynamicMap.put("CubeIn", new CubeInTransition());
+		mDynamicMap.put("CubeOut", new CubeOutTransition());
+		mDynamicMap.put("FlipVertical", new FlipVerticalTransition(mPager));
+		mDynamicMap.put("FlipHorizontal", new FlipHorizontalTransition(mPager));
+		mDynamicMap.put("Stack", new StackTransition(mPager));
+		mDynamicMap.put("ZoomIn", new ZoomInTransition());
+		mDynamicMap.put("ZoomOut", new ZoomOutTransition());
+		mDynamicMap.put("RotateUp", new RotateUpTransition(mPager));
+		mDynamicMap.put("RotateDown", new RotateDownTransition(mPager));
+		mDynamicMap.put("Accordion", new AccordionTransition());
 	}
 
-	public DynamicAnimation findDynamicAnimation(String name) {
-		DynamicAnimation animation = DynamicAnimation.NULL;
+	public DynamicTransition findDynamicTransition(String name) {
+		DynamicTransition transition = DynamicTransition.NULL;
 		if (mDynamicMap.get(name) != null) {
-			animation = mDynamicMap.get(name);
+			transition = mDynamicMap.get(name);
 		}
-		return animation;
+		return transition;
 	}
 
-	public void setDynamicTransition(DynamicAnimation animation) {
+	public void setDynamicTransition(DynamicTransition animation) {
 		mDynamicTransition = animation;
 	}
 
-	public void setStaticTransition(StaticAnimation animation) {
+	public void setStaticTransition(StaticTransition animation) {
 		mStaticTransition = animation;
 	}
 
-	public void setAnimation(StaticAnimation animation) {
+	public void setAnimation(Animation animation) {
 		mAnimation = animation;
 	}
 
@@ -167,7 +168,7 @@ public class ViewPagerPlayer {
 			public void onAnimationUpdate(ValueAnimator animation) {
 				float offset = (float) (Float) animation.getAnimatedValue();
 				View view = findViewFromPosition(mPager.getCurrentItem());
-				mAnimation.animate(view, null, offset, 0, State.GOING_RIGHT);
+				mAnimation.animate(view, offset);
 			}
 		});
 
