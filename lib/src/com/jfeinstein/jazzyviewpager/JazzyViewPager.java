@@ -131,17 +131,13 @@ public class JazzyViewPager extends ViewPager {
 	}
 
 	private void updateAdapter(PagerAdapter adapter) {
-		if (adapter != null) {
-			if (mOutlineEnabled) {
-				mAdapter = new OutlinePagerAdapter(adapter, mContext);
-				((OutlinePagerAdapter) mAdapter).setColor(mOutlineColor);
-			} else {
-				mAdapter = new ContainerPagerAdapter(adapter, mContext);
-			}
-			super.setAdapter(mAdapter);
+		if (mOutlineEnabled) {
+			mAdapter = new OutlinePagerAdapter(adapter, mContext);
+			((OutlinePagerAdapter) mAdapter).setColor(mOutlineColor);
 		} else {
-			super.setAdapter(adapter);
+			mAdapter = new ContainerPagerAdapter(adapter, mContext);
 		}
+		super.setAdapter(mAdapter);
 	}
 
 	@Override

@@ -117,17 +117,13 @@ public class ViewPagerPlayer {
 	}
 
 	private void updateAdapter(PagerAdapter adapter) {
-		if (adapter != null) {
-			if (mOutlineEnabled) {
-				mAdapter = new OutlinePagerAdapter(adapter, mContext);
-				((OutlinePagerAdapter) mAdapter).setColor(mOutlineColor);
-			} else {
-				mAdapter = new ContainerPagerAdapter(adapter, mContext);
-			}
-			mPager.setAdapter(mAdapter);
+		if (mOutlineEnabled) {
+			mAdapter = new OutlinePagerAdapter(adapter, mContext);
+			((OutlinePagerAdapter) mAdapter).setColor(mOutlineColor);
 		} else {
-			mPager.setAdapter(adapter);
+			mAdapter = new ContainerPagerAdapter(adapter, mContext);
 		}
+		mPager.setAdapter(mAdapter);
 	}
 
 	private void initDynamicMap() {
