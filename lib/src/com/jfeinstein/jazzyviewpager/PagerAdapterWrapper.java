@@ -26,8 +26,24 @@ import android.view.ViewGroup;
 public class PagerAdapterWrapper extends PagerAdapter {
 	private PagerAdapter mAdapter;
 
+    private static final PagerAdapter NULL = new PagerAdapter() {
+		@Override
+		public int getCount() {
+			return 0;
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return false;
+		}
+    };
+
 	public PagerAdapterWrapper(PagerAdapter adapter) {
-		mAdapter = adapter;
+		if (adapter == null) {
+			mAdapter = NULL;
+		} else {
+			mAdapter = adapter;
+		}
 	}
 
 	public PagerAdapter getAdapter() {
