@@ -1,13 +1,14 @@
 package com.jfeinstein.jazzyviewpager;
 
-import com.jfeinstein.jazzyviewpager.animation.DynamicTransition;
 import com.jfeinstein.jazzyviewpager.animation.FadeTransition;
 import com.jfeinstein.jazzyviewpager.animation.StaticTransition;
+import com.jfeinstein.jazzyviewpager.animation.ZoomOutAnimation;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,16 +19,18 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private JazzyViewPager mJazzy;
+	private ViewPager mPager;
+	private ViewPagerPlayer mPlayer;
 	boolean mFadeEnabled = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mJazzy = (JazzyViewPager) findViewById(R.id.jazzy_pager);
+		mPager = (ViewPager) findViewById(R.id.jazzy_pager);
+		mPager.setPageMargin(30);
 
-		setupJazziness(mJazzy.findDynamicTransition("Tablet"));
+		setupJazziness("Tablet");
 	}
 
 	@Override
@@ -43,22 +46,24 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().toString().equals("Toggle Fade")) {
 			if (!mFadeEnabled) {
-				mJazzy.setStaticTransition(StaticTransition.NULL);
+				mPlayer.setStaticTransition(StaticTransition.NULL);
 			} else {
-				mJazzy.setStaticTransition(new FadeTransition());
+				mPlayer.setStaticTransition(new FadeTransition());
 			}
 			mFadeEnabled = !mFadeEnabled;
 		} else {
-			setupJazziness(mJazzy.findDynamicTransition(item.getTitle().toString()));
+			setupJazziness(item.getTitle().toString());
 		}
 		return true;
 	}
 
-	private void setupJazziness(DynamicTransition transition) {
-		mJazzy.setDynamicTransition(transition);
-		mJazzy.setAdapter(new MainAdapter());
-		mJazzy.setPageMargin(30);
-		mJazzy.setOutlineEnabled(true);
+	private void setupJazziness(String animation) {
+		mPlayer = new ViewPagerPlayer(this, mPager);
+		mPlayer.setAdapter(new MainAdapter());
+		mPlayer.setDynamicTransition(mPlayer.findDynamicTransition(animation));
+		mPlayer.setAnimation(new ZoomOutAnimation(1.0f, 0.5f, 0.5f));
+		mPlayer.setOutlineEnabled(true);
+		mPlayer.start();
 	}
 
 	private class MainAdapter extends PagerAdapter {
