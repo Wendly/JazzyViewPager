@@ -44,6 +44,8 @@ public class ViewPagerPlayer {
 
 	public static final String TAG = "ViewPagerPlayer";
 
+	private static final int DEFAULT_DURATION = 30000;
+
 	private Context mContext;
 	private boolean mOutlineEnabled;
 	private int mOutlineColor;
@@ -59,6 +61,7 @@ public class ViewPagerPlayer {
 	private int mDuration;
 	private int mRepeatMode;
 	private int mRepeatCount;
+	private Map<View, PageAnimator> mPageAnimators = new HashMap<View, PageAnimator>();
 
 	private Method mInfoForPosition;
 	private Field mItemInfoObject;
@@ -213,15 +216,6 @@ public class ViewPagerPlayer {
 			}
 		});
 
-		mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				float offset = (float) (Float) animation.getAnimatedValue();
-				View view = findViewFromPosition(mPager.getCurrentItem());
-				mAnimation.animate(view, offset);
-			}
-		});
-
 		mAnimator.start();
 	}
 
@@ -256,6 +250,7 @@ public class ViewPagerPlayer {
 			}
 
 			if (mStarted) {
+				playPage(findViewFromPosition(position));
 				play();
 			}
 		}
@@ -290,6 +285,13 @@ public class ViewPagerPlayer {
 
 			View left = findViewFromPosition(position);
 			View right = findViewFromPosition(position + 1);
+
+			if (mStarted) {
+				playPage(left);
+				if (positionOffset != 0) {
+					playPage(right);
+				}
+			}
 
 			mStaticTransition.animate(left, right, positionOffset, positionOffsetPixels, mState);
 			mDynamicTransition.animate(left, right, positionOffset, positionOffsetPixels, mState);
@@ -422,6 +424,61 @@ public class ViewPagerPlayer {
 
 		public boolean isCanceled() {
 			return mCanceled;
+		}
+	}
+
+	private void playPage(View page) {
+		if (page == null) {
+			return;
+		}
+
+		PageAnimator animator = mPageAnimators.get(page);
+		if (animator == null) {
+			animator = new PageAnimator(page);
+			mPageAnimators.put(page, animator);
+		}
+
+		if (!animator.isStarted()) {
+			animator.start();
+		}
+	}
+
+	private void stopAllPage() {
+		for (Map.Entry<View, PageAnimator> entry : mPageAnimators.entrySet()) {
+			entry.getValue().cancel();
+		}
+		mPageAnimators.clear();
+	}
+
+	private class PageAnimator extends ValueAnimator {
+		private View mPage;
+
+		public PageAnimator(View page) {
+			super();
+
+			mPage = page;
+
+			setFloatValues(Animation.OFFSET_BEGIN, Animation.OFFSET_END);
+			setDuration(DEFAULT_DURATION);
+			setRepeatMode(ValueAnimator.REVERSE);
+			setRepeatCount(Integer.MAX_VALUE);
+
+			addListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mAnimation.animate(mPage, Animation.OFFSET_BEGIN);
+				}
+			});
+
+			addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator animation) {
+					float offset = (float) (Float) animation.getAnimatedValue();
+					if (mPage.isShown()) {
+						mAnimation.animate(mPage, offset);
+					}
+				}
+			});
 		}
 	}
 
