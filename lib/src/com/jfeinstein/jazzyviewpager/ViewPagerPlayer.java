@@ -290,6 +290,7 @@ public class ViewPagerPlayer {
 			View right = findViewFromPosition(position + 1);
 
 			if (mStarted) {
+				play();
 				playPage(left);
 				if (positionOffset != 0) {
 					playPage(right);
