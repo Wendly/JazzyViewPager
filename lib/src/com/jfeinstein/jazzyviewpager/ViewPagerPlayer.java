@@ -46,6 +46,9 @@ public class ViewPagerPlayer {
 
 	private static final int DEFAULT_DURATION = 30000;
 
+	public static final int REPEAT_MODE_ONE = 0;
+	public static final int REPEAT_MODE_ALL = 1;
+
 	private Context mContext;
 	private boolean mOutlineEnabled;
 	private int mOutlineColor;
@@ -78,9 +81,8 @@ public class ViewPagerPlayer {
 		mContext = context;
 		mPager = pager;
 		mStarted = false;
-		mDuration = 30000;
+		mDuration = DEFAULT_DURATION * 2;
 		mRepeatCount = 0;
-		mRepeatMode = ValueAnimator.REVERSE;
 		mOutlineEnabled = false;
 		mOutlineColor = Color.WHITE;
 		mEnabled = true;
@@ -172,15 +174,17 @@ public class ViewPagerPlayer {
 	public void stop() {
 		mStarted = false;
 		mAnimator.cancel();
+		stopAllPage();
 		mAnimator = null;
 	}
 
 	public void setRepeatMode(int value) {
+		if (value == REPEAT_MODE_ONE) {
+			mRepeatCount = ValueAnimator.INFINITE;
+		} else if (value == REPEAT_MODE_ALL) {
+			mRepeatCount = 0;
+		}
 		mRepeatMode = value;
-	}
-
-	public void setRepeatCount(int value) {
-		mRepeatCount = value;
 	}
 
 	public void next() {
@@ -201,9 +205,8 @@ public class ViewPagerPlayer {
 		}
 
 		mAnimator = new PagerAnimator();
-		mAnimator.setFloatValues(0, 1);
+		mAnimator.setFloatValues(Animation.OFFSET_BEGIN, Animation.OFFSET_END);
 		mAnimator.setDuration(mDuration);
-		mAnimator.setRepeatMode(mRepeatMode);
 		mAnimator.setRepeatCount(mRepeatCount);
 
 		mAnimator.addListener(new AnimatorListenerAdapter() {
