@@ -33,7 +33,6 @@ import com.jfeinstein.jazzyviewpager.animation.FlipVerticalTransition;
 import com.jfeinstein.jazzyviewpager.animation.RotateDownTransition;
 import com.jfeinstein.jazzyviewpager.animation.RotateUpTransition;
 import com.jfeinstein.jazzyviewpager.animation.StackTransition;
-import com.jfeinstein.jazzyviewpager.animation.StandardTransition;
 import com.jfeinstein.jazzyviewpager.animation.StaticTransition;
 import com.jfeinstein.jazzyviewpager.animation.TabletTransition;
 import com.jfeinstein.jazzyviewpager.animation.ZoomInTransition;
@@ -55,7 +54,7 @@ public class ViewPagerPlayer {
 	private boolean mEnabled;
 
 	private Map<String, DynamicTransition> mDynamicMap;
-	private DynamicTransition mDynamicTransition = new StandardTransition();
+	private DynamicTransition mDynamicTransition = DynamicTransition.NULL;
 	private StaticTransition mStaticTransition = StaticTransition.NULL;
 	private Animation mAnimation = Animation.NULL;
 
